@@ -53,10 +53,29 @@ export default {
       2) store.모듈명.actions 이름 그대로 사용하기
          ...mapActions('모듈명', ['액션명1', '액션명2']),
       */
-    clearAll(e) {},
-    addTodo(e) {},
+    clearAll(e) {
+      //debugger;
+      console.log(e.target);
+      this.$data.todoItems = [];
+    },
+    addTodo(e, newTodoItem) {
+      const ids = this.$data.todoItems.map((value) => {
+        return value.id;
+      });
+      const maxid = ids.reduce((pvalue, cvalue) => {
+        if (pvalue > cvalue) return pvalue;
+        else return cvalue;
+      }, 0);
+      //추가될 객체
+      const newobj = {
+        id: maxid + 1,
+        todo: newTodoItem,
+        done: false,
+      };
+      this.$data.todoItems = [...this.$data.todoItems, newobj];
+    },
     doneToggle(e, id) {
-      const arrMap = this.$data.todoItems.map((value, index, array) => {
+      const arrMap = this.$data.todoItems.map((value) => {
         if (id === value.id) value.done = !value.done;
 
         return value;
@@ -64,13 +83,13 @@ export default {
       this.$data.todoItems = arrMap;
     },
     removeTodo(id) {
-      const arrDelete = this.$data.todoItems.filter((value, index, array) => {
+      const arrRemove = this.$data.todoItems.filter((value) => {
         if (id === value.id) {
           return false;
         }
         return true;
       });
-      this.$data.todoItems = arrDelete;
+      this.$data.todoItems = arrRemove;
     },
   },
   components: {
